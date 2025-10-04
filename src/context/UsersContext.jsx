@@ -15,7 +15,7 @@ export const UsersProvider = ({ children }) => {
     const fetchUsers = async () => {
       try {
         const token = localStorage.getItem("token");
-        const res = await axios.get('http://localhost:3000/api/admin/users/1', {
+        const res = await axios.get('http://localhost:3001/api/admin/users/1', {
           headers: { Authorization: `Bearer ${token}` },
         });
         const fetchedUsers = Array.isArray(res.data) ? res.data : [res.data];

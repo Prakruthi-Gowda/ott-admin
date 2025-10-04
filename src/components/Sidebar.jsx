@@ -49,7 +49,7 @@ const Sidebar = () => {
           <FaUsers className="mr-3" />
           Users
         </Link>
-        <Link
+        {/* <Link
           to="/signup"
           className={`flex items-center py-2.5 px-4 rounded transition duration-200 hover:bg-gray-700 ${
             location.pathname === "/signup" ? "bg-gray-700" : ""
@@ -66,7 +66,7 @@ const Sidebar = () => {
         >
           <FaCog className="mr-3" />
           Signin
-        </Link>
+        </Link> */}
       </nav>
     </div>
   );

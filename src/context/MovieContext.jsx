@@ -12,14 +12,19 @@ export const MovieProvider = ({ children }) => {
   const [loading, setLoading] = useState(false);
   const API_URL = import.meta.env.VITE_API_URL;
 
+  // Helper to get full media URL
+  const getMediaURL = (path) => {
+    if (!path) return "";
+    return path.startsWith("http") ? path : `${API_URL}/${path}`;
+  };
+
   // Fetch categories
   const fetchCategories = async () => {
     try {
       const token = localStorage.getItem("token");
-      const res = await axios.get(
-        `${API_URL}/categories`,
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
+      const res = await axios.get(`${API_URL}/categories`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
       const fetchedCategories = Array.isArray(res.data)
         ? res.data
         : res.data.data || [];
@@ -39,7 +44,16 @@ export const MovieProvider = ({ children }) => {
       const fetchedMovies = Array.isArray(res.data)
         ? res.data
         : res.data.data || [];
-      setMovies(fetchedMovies);
+
+      // Map movies to include full media URLs
+      const moviesWithUrls = fetchedMovies.map((movie) => ({
+        ...movie,
+        bannerURL: getMediaURL(movie.banner),
+        trailerURL: getMediaURL(movie.trailer),
+        movieURL: getMediaURL(movie.movie),
+      }));
+
+      setMovies(moviesWithUrls);
     } catch (error) {
       Swal.fire("Error", error.response?.data?.message || error.message, "error");
     }
@@ -94,9 +108,6 @@ export const MovieProvider = ({ children }) => {
     genre,
     releaseDate,
     description,
-    oldBanner,
-    oldTrailer,
-    oldMovie,
   }) => {
     setLoading(true);
     try {
@@ -107,15 +118,14 @@ export const MovieProvider = ({ children }) => {
       formData.append("genre", genre);
       formData.append("releaseDate", releaseDate);
       formData.append("description", description);
+
       if (banner instanceof File) formData.append("banner", banner);
       if (trailer instanceof File) formData.append("trailer", trailer);
       if (movie instanceof File) formData.append("movie", movie);
 
-      await axios.put(
-        `${API_URL}/movies/${movieId}`,
-        formData,
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
+      await axios.put(`${API_URL}/movies/${movieId}`, formData, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
 
       await fetchMovies();
       Swal.fire("Success", "Movie updated successfully!", "success");

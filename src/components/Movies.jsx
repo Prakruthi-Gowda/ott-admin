@@ -167,7 +167,7 @@ const Movies = () => {
       cell: (row) =>
         row.banner ? (
           <img
-            src={`http://localhost:3000/${row.banner}`}
+            src={`http://localhost:3001/${row.banner}`}
             alt="banner"
             className="h-16 w-16 object-cover rounded"
           />
@@ -181,7 +181,7 @@ const Movies = () => {
         row.trailer ? (
           <video controls className="h-20 w-36">
             <source
-              src={`http://localhost:3000/${row.trailer}`}
+              src={`http://localhost:3001/${row.trailer}`}
               type="video/mp4"
             />
           </video>
@@ -195,7 +195,7 @@ const Movies = () => {
         row.movie ? (
           <video controls className="h-20 w-36">
             <source
-              src={`http://localhost:3000/${row.movie}`}
+              src={`http://localhost:3001/${row.movie}`}
               type="video/mp4"
             />
           </video>
